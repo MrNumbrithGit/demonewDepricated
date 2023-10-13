@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat-deploy
+  labels:
+    app: tomcat-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tomcat-app
+    spec:
+      containers:
+      - name: tomcat-container
+        image: mrnumbrithdocker/demonew:0.1
+        ports:
+        - containerPort: 8080
+  selector:
+    matchLabels:
+      app: tomcat-app
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-service
+  labels:
+    app: tomcat-app
+spec:
+  selector:
+    app: tomcat-app
+
+  type: NodePort
+  ports:
+  - nodePort: 31000
+    port: 8080
+    targetPort: 8080
